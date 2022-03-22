@@ -49,12 +49,11 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
         <!-------->
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <title>$pageName</title>
-    </head>";
+    </head>
+    <body>";
 
     if($nav)
         include_once ABS_PATH.'/components/nav.php';
-
-    print '<body>';
 }
 
 /**
