@@ -20,5 +20,7 @@ include_once 'load.php';
 include_once LIB_PATH.'/library.php';
 
 printHead('Richiesta Token', 
-          [ 'style.css' ]);
+          [ 'style.css' ],
+          [ ],
+          false);
 ?>

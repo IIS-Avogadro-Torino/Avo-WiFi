@@ -25,7 +25,7 @@
  *  @param bool $nav indicates the presence of the nav-bar
  *  @return void
  */
-function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = false) {
+function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
     $cssIncludes = '';
     $jsIncludes = '';
     
@@ -51,7 +51,9 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = false) {
         <title>$pageName</title>
     </head>";
 
-    include_once ABS_PATH.'/components/nav.php';
+    if($nav)
+        include_once ABS_PATH.'/components/nav.php';
 
     print '<body>';
 }
+
