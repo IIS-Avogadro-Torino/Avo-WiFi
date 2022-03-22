@@ -57,3 +57,13 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
     print '<body>';
 }
 
+/**
+ * Prints the end of the page with the footer
+ * Param:
+ *  @return void
+ */
+function printFooter() {
+    print "</body>";
+    
+    include_once ABS_PATH.'/components/nav.php';
+}
