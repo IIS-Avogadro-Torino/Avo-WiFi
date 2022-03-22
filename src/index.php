@@ -25,4 +25,10 @@ printHead('Richiesta Token',
           false);
 ?>
 
+<?php include_once COMP_PATH.'/logoBox.php';?>
+
+<div class=" container ">
+    <h1></h1>
+</div>
+
 <?php printFooter(); ?>
