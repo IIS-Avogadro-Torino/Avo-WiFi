@@ -30,10 +30,10 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
     $jsIncludes = '';
     
     foreach( $cssFiles as $cssFile )
-        $cssIncludes .= "<link type=\"stylesheet\" href=\"".ABS_PATH.'/assets/css/'.$cssFile."\" \>\n";
+        $cssIncludes .= "<link rel=\"stylesheet\" href=\"assets/css/$cssFile\">\n";
     
     foreach( $jsFiles as $jsFile )
-        $jsIncludes .= "<script src=\"".ABS_PATH.'/assets/css/'.$jsFile."\" defer></script>\n";
+        $jsIncludes .= "<script src=\"assets/css/$jsFile\" defer></script>\n";
 
     print "
     <!DOCTYPE html>
@@ -41,6 +41,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
     <head>
         <meta charset=\"UTF-8\">
         <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
+        <link rel=\"icon\" href=\"assets/img/icon.png\">
         <!-- CSS -->
         $cssIncludes
         <!--------->
