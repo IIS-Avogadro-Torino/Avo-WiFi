@@ -16,9 +16,4 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
 
-include_once 'load.php';
-include_once LIB_PATH.'/library.php';
-
-printHead('Richiesta Token', 
-          [ 'style.css' ]);
-?>
+include_once LIB_PATH.'/UILibrary.php';

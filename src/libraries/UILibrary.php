@@ -25,15 +25,15 @@
  *  @param bool $nav indicates the presence of the nav-bar
  *  @return void
  */
-function printHead($pageName, $cssFiles, $jsFiles, $nav = false) {
+function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = false) {
     $cssIncludes = '';
     $jsIncludes = '';
     
     foreach( $cssFiles as $cssFile )
-        $cssIncludes += "<link type=\"stylesheet\" href=\"$cssFile\" \>\n";
+        $cssIncludes .= "<link type=\"stylesheet\" href=\"".ABS_PATH.'/assets/css/'.$cssFile."\" \>\n";
     
     foreach( $jsFiles as $jsFile )
-        $jsIncludes += "<script src=\"$jsFile\" defer></script>\n";
+        $jsIncludes .= "<script src=\"".ABS_PATH.'/assets/css/'.$jsFile."\" defer></script>\n";
 
     print "
     <!DOCTYPE html>
@@ -43,10 +43,13 @@ function printHead($pageName, $cssFiles, $jsFiles, $nav = false) {
         <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
         <!-- CSS -->
         $cssIncludes
+        <!--------->
         <!-- JS -->
         $jsIncludes
+        <!-------->
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <title>$pageName</title>
-    </head>
-    <body>";
+    </head>";
+
+
 }
