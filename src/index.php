@@ -27,8 +27,11 @@ printHead('Richiesta Token',
 
 <?php include_once COMP_PATH.'/logoBox.php';?>
 
-<div class=" container ">
-    <h1></h1>
+<div class="page-cont container container--gapM page-size">
+    <h1>Richiedi il tuo token</h1>
+    <h1>Richiedi il tuo token</h1>
+    <h1>Richiedi il tuo token</h1>
+
 </div>
 
 <?php printFooter(); ?>

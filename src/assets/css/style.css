@@ -20,3 +20,10 @@
 @import 'base.css';
 @import 'layouts.css';
 @import 'components.css';
+
+.page-cont {
+    margin-top: 3rem;
+    border-radius: 2.5rem;
+    background: var(--grad-white);
+    box-shadow: var(--box-shadow-white);
+}
