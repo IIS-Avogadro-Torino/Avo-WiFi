@@ -63,7 +63,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
  *  @return void
  */
 function printFooter() {
-    print "</body>";
-    
     include_once ABS_PATH.'/components/footer.php';
+    print "</body>
+           </html>";
 }

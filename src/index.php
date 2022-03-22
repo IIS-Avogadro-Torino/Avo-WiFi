@@ -24,3 +24,5 @@ printHead('Richiesta Token',
           [ ],
           false);
 ?>
+
+<?php printFooter(); ?>
