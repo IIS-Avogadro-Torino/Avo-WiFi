@@ -16,3 +16,16 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
 */
+/*_________logo-box_________*/
+.logo-box {
+    height: 15rem;
+    margin: 0 auto;
+    border-radius: 2.5rem;
+    box-sizing: border-box;
+    padding: 2rem;
+    background-color: var(--clr-background-secondary);
+    box-shadow: var(--box-shadow-white);
+}
+.logo-box__img {
+    width: 36rem;
+}

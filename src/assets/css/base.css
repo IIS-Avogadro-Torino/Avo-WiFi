@@ -26,4 +26,6 @@ main {
     height: 100%;
     min-height: 850px;
     background-color: var(--clr-background-primary);
+    padding: 3rem 0;
+    box-sizing: border-box;
 }

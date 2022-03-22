@@ -1,4 +1,4 @@
-/*
+<?php
 ######################################################################
 # Wi-Fi-voucher-o-matic-2.0
 # Copyright (C) 2022 Marco Schiavello, Ivan Bertotto, ITIS Avogadro
@@ -15,27 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
-*/
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.container--row {
-    flex-direction: row;
-}
-.container--gapM {
-    gap: 2rem;
-}
-.container--justSpaceBtwn {
-    justify-content: space-between;
-}
-.container--alignStart {
-    align-items: flex-start;
-}
-.page-size {
-    width: 80%;
-    min-width: 40rem;
-    max-width: 70rem;
-}
+?>
+<div class="logo-box container page-size">
+    <img class="logo-box__img" src="assets/img/logo_large.png" alt="image logo box">
+</div>

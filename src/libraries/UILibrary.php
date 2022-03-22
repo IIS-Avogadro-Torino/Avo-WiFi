@@ -41,7 +41,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
     <head>
         <meta charset=\"UTF-8\">
         <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
-        <link rel=\"icon\" href=\"assets/img/icon.png\">
+        <link rel=\"icon\" href=\"assets/img/logo.png\">
         <!-- CSS -->
         $cssIncludes
         <!--------->
@@ -54,7 +54,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
     <body>";
 
     if($nav)
-        include_once ABS_PATH.'/components/nav.php';
+        include_once  COMP_PATH.'/nav.php';
     
     print '<main>';
 }
@@ -67,7 +67,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
 function printFooter() {
     print '</main>';
 
-    include_once ABS_PATH.'/components/footer.php';
+    include_once  COMP_PATH.'/footer.php';
 
     print "</body>
            </html>";
