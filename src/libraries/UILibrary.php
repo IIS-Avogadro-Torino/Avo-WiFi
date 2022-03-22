@@ -51,5 +51,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = false) {
         <title>$pageName</title>
     </head>";
 
+    include_once ABS_PATH.'/components/nav.php';
 
+    print '<body>';
 }
