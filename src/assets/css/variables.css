@@ -16,3 +16,15 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
 */
+:root {
+    /*______Colors______*/
+    --clr-primary: black;
+    --clr-background-primary: #1A7A90;
+    --clr-background-secondary: #4C4C4C;
+
+    /*______Gradients______*/
+    --grad-white: linear-gradient(0deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+
+    /*______Box-shadows______*/
+    --shadow-box-white: 0 20px 40px 0 rgb(216 227 235 / 15%);
+}

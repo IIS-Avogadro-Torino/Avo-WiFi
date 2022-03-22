@@ -55,6 +55,8 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
 
     if($nav)
         include_once ABS_PATH.'/components/nav.php';
+    
+    print '<main>';
 }
 
 /**
@@ -63,7 +65,10 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
  *  @return void
  */
 function printFooter() {
+    print '</main>';
+
     include_once ABS_PATH.'/components/footer.php';
+
     print "</body>
            </html>";
 }
