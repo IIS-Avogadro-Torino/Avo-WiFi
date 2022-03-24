@@ -29,8 +29,14 @@ printHead('Richiesta Token',
 
 <div class="page-cont container container--gapM page-size">
     <h1>Richiedi il tuo token</h1>
-    <h1>Richiedi il tuo token</h1>
-    <h1>Richiedi il tuo token</h1>
+    
+    <form class="" method="POST" action="index.php">
+        <?php 
+            inputText("name", "Nome"); 
+            inputText("surname", "Cognome"); 
+            inputText("email", "E-Mail"); 
+        ?>
+    </form>
 
 </div>
 
