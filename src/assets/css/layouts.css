@@ -28,6 +28,9 @@
 .container--gapM {
     gap: 2rem;
 }
+.container--gapS {
+    gap: 1rem;
+}
 .container--justSpaceBtwn {
     justify-content: space-between;
 }

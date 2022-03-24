@@ -30,4 +30,44 @@
 }
 /*_________Input-text_________*/
 .input-text {
+    width: 100%;
+}
+.input-text__input {
+    width: 100%;
+    background-color: transparent;
+    border: solid 2px var(--clr-primary);
+    padding: 0.4rem;
+    outline: none;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+}
+.input-text__label {
+    height: 0;
+    position: relative;
+    top: -1.7rem;
+    margin-left: 0.4rem;
+    pointer-events: none;
+    transition: 0.3s ease;
+    background-image: var(--grad-white);
+}
+.input-text__input:focus + .input-text__label,
+.input-text__input:active + .input-text__label {
+    top: -2.8rem;
+    font-size: 0.8;
+    background-image: var(--grad-white);
+}
+/*_________Button_________*/
+.button {
+    background-color: var(--clr-background-secondary);
+    border: none;
+    color: var(--clr-secondary);
+    border-radius: 0.5rem;
+    outline: none;
+    padding: 0.6rem 4rem;
+    font-size: 1.2rem;
+    transition: 0.4s ease;
+}
+.button:hover {
+    background-color: var(--clr-background-primary);
+    color: var(--clr-primary);
 }

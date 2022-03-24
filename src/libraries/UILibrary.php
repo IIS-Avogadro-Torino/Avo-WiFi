@@ -82,8 +82,8 @@ function inputText($name, $label = null) {
     $label = $label === null ? $name : $label;
 
     print "
-    <div class=\"input-text container\">
-        <input class=\"input-text__input\" type=\"text\" name=\"$name\">
+    <div class=\"input-text container container--alignStart\">
+        <input class=\"input-text__input\" type=\"text\" name=\"$name\" required autocomplete=\"off\">
         <label class=\"input-text__label\" for=\"$name\">$label</label>
     </div>";
 }

@@ -28,9 +28,9 @@ printHead('Richiesta Token',
 <?php include_once COMP_PATH.'/logoBox.php';?>
 
 <div class="page-cont container container--gapM page-size">
-    <h1>Richiedi il tuo token</h1>
+    <h1 class="page-cont__title">Richiedi il tuo token</h1>
     
-    <form class="" method="POST" action="index.php">
+    <form class="page-cont__form container container--gapS" method="POST" action="index.php">
         <?php 
             inputText("name", "Nome"); 
             inputText("surname", "Cognome"); 
@@ -38,6 +38,7 @@ printHead('Richiesta Token',
         ?>
     </form>
 
+    <input class="button" type="submit" name="indexSubmit" value="Richiedi">
 </div>
 
 <?php printFooter(); ?>

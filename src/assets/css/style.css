@@ -26,4 +26,12 @@
     border-radius: 2.5rem;
     background: var(--grad-white);
     box-shadow: var(--box-shadow-white);
+    padding: 2rem;
+    box-sizing: border-box;
+}
+.page-cont__title {
+    font-size: 3rem;
+}
+.page-cont__form {
+    width: 60%;
 }
