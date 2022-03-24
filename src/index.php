@@ -20,7 +20,41 @@ include_once 'load.php';
 include_once LIB_PATH.'/library.php';
 
 if(isset($_POST['indexSubmit'])) {
-    
+    $db = DB::instace();
+    $authCode = strtoupper(bin2hex(random_bytes(30)));
+    $email = $db->clearStr(trim($_POST['email']));
+    $name = $db->clearStr(trim($_POST['name']));
+    $surname = $db->clearStr(trim($_POST['surname']));
+
+    $queryRes = $db->query("SELECT COUNT(*), user_id
+                            FROM users
+                            WHERE user_email = '$email';");
+    $queryRes = mysqli_fetch_array($queryRes);
+
+    if((int)$queryRes[0] !== 1) {
+        $db->query("INSERT INTO users(user_name, user_surname, user_email) 
+                    VALUES('$name', '$surname', '$email');");
+    }
+
+    $queryRes = $db->query("SELECT user_id
+                            FROM users
+                            WHERE user_email = '$email';");
+    $queryRes = mysqli_fetch_array($queryRes)[0];
+
+    $db->query("INSERT INTO auth_codes(auth_code_value, fk_user_id) 
+                VALUES('$authCode', '$queryRes');");
+
+    $emailRes = sendMail($email, 
+                         $name.' '.$surname,
+                         "Gentile ".$name.' '.$surname.", il suo codice è: <br> <strong>$authCode</strong>");
+
+    if(!$emailRes) {
+        header('Location: index.php');
+        die();
+    }
+
+    header('Location: authCode.php');
+    die();
 }
 
 printHead('Richiesta Token', 
@@ -40,9 +74,8 @@ printHead('Richiesta Token',
             inputText("surname", "Cognome"); 
             inputText("email", "E-Mail"); 
         ?>
+        <input class="button" type="submit" name="indexSubmit" value="Richiedi">
     </form>
-
-    <input class="button" type="submit" name="indexSubmit" value="Richiedi">
 </div>
 
 <?php printFooter(); ?>

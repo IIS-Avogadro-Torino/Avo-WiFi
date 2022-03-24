@@ -31,7 +31,9 @@ function sendMail($email, $fullName, $body)
     require_once LIB_PATH.'/PHPmailer/src/PHPMailer.php';
     require_once LIB_PATH.'/PHPmailer/src/SMTP.php';
 
+
     $mail = new PHPMailer;
+    //$mail->SMTPDebug = 3;
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host =  $GLOBALS['SMTPHost'];                  // Specify main and backup SMTP servers 
     $mail->SMTPAuth = true;                               // Enable SMTP authentication
@@ -40,14 +42,14 @@ function sendMail($email, $fullName, $body)
     $mail->SMTPSecure = 'TLS';                            // Enable TLS encryption, `ssl` also accepted
     $mail->Port = 587;                                    // TCP port to connect to 465 (SSL) o 587 (TLS)
     
-    $mail->setFrom('some@email.com','Avo Wi-Fi');
+    $mail->setFrom('amministrazione_futurelabs@itisavogadro.it','Avo Wi-Fi');
     $mail->addAddress($email, $fullName);                     // Add a recipient
     
     $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
     //$mail->addAttachment($file,$name);            // Optional name
     $mail->isHTML(true);                                  // Set email format to HTML
     
-    $mail->Subject = 'Avo Wi-Fi - token autenticazione';
+    $mail->Subject = "Avo Wi-Fi - token autenticazione";
     $mail->Body    = $body;
     
     if(!$mail->send()) 

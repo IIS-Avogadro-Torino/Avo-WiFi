@@ -24,7 +24,7 @@ class DB {
     private $conn;
 
     private function  __construct() {
-        $this->con = mysqli_connect($GLOBALS["location"], $GLOBALS["username"], $GLOBALS["password"], $GLOBALS["database"]);
+        $this->conn = mysqli_connect($GLOBALS["location"], $GLOBALS["username"], $GLOBALS["password"], $GLOBALS["database"]);
     }
 
     public static function instace() {
@@ -34,17 +34,17 @@ class DB {
         return self::$instance;
     }
 
-        /**
-        *   Shortcut for query the DB
-        *   Params: 
-        *       @return mysqli_result|bool - the result of the query
-        */
-        function query($query) { return mysqli_query($this->conn,$query); }
-        
-        /**
-        *   Shortcut for sanitize a string
-        *   Params: 
-        *       @return string - sanitized string
-        */
-        function cleanStr($str) { return mysqli_real_escape_string($this->conn,$str); }
+    /**
+    *   Shortcut for query the DB
+    *   Params: 
+    *       @return mysqli_result|bool - the result of the query
+    */
+    function query($query) { return mysqli_query($this->conn,$query); }
+    
+    /**
+    *   Shortcut for sanitize a string
+    *   Params: 
+    *       @return string - sanitized string
+    */
+    function clearStr($str) { return mysqli_real_escape_string($this->conn,$str); }
 }

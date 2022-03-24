@@ -51,9 +51,9 @@
     background-image: var(--grad-white);
 }
 .input-text__input:focus + .input-text__label,
-.input-text__input:active + .input-text__label {
+.input-text__input:valid + .input-text__label {
     top: -2.8rem;
-    font-size: 0.8;
+    font-size: 0.8rem;
     background-image: var(--grad-white);
 }
 /*_________Button_________*/
