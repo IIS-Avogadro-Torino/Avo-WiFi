@@ -16,33 +16,35 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
 
-include_once 'load.php';
-include_once LIB_PATH.'/library.php';
+/**
+ * 
+ */
+class DB {
+    private static $instance;
+    private $conn;
 
-if(isset($_POST['indexSubmit'])) {
-    
+    private function  __construct() {
+        $this->con = mysqli_connect($GLOBALS["location"], $GLOBALS["username"], $GLOBALS["password"], $GLOBALS["database"]);
+    }
+
+    public static function instace() {
+        if(empty(self::$instance))
+            self::$instance = new DB();
+
+        return self::$instance;
+    }
+
+        /**
+        *   Shortcut for query the DB
+        *   Params: 
+        *       @return mysqli_result|bool - the result of the query
+        */
+        function query($query) { return mysqli_query($this->conn,$query); }
+        
+        /**
+        *   Shortcut for sanitize a string
+        *   Params: 
+        *       @return string - sanitized string
+        */
+        function cleanStr($str) { return mysqli_real_escape_string($this->conn,$str); }
 }
-
-printHead('Richiesta Token', 
-          [ 'style.css' ],
-          [ ],
-          false);
-?>
-
-<?php include_once COMP_PATH.'/logoBox.php';?>
-
-<div class="page-cont container container--gapM page-size">
-    <h1 class="page-cont__title">Richiedi il tuo token</h1>
-    
-    <form class="page-cont__form container container--gapS" method="POST" action="index.php">
-        <?php 
-            inputText("name", "Nome"); 
-            inputText("surname", "Cognome"); 
-            inputText("email", "E-Mail"); 
-        ?>
-    </form>
-
-    <input class="button" type="submit" name="indexSubmit" value="Richiedi">
-</div>
-
-<?php printFooter(); ?>
