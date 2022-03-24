@@ -42,7 +42,7 @@ if(isset($_POST['indexSubmit'])) {
     $queryRes = mysqli_fetch_array($queryRes)[0];
 
     $db->query("INSERT INTO auth_codes(auth_code_value, fk_user_id) 
-                VALUES('$authCode', '$queryRes');");
+                VALUES('$authCode', $queryRes);");
 
     $emailRes = sendMail($email, 
                          $name.' '.$surname,
