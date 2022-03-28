@@ -29,6 +29,9 @@
     gap: 2rem;
 }
 .container--gapS {
+    gap: 1.5rem;
+}
+.container--gapXS {
     gap: 1rem;
 }
 .container--justSpaceBtwn {
@@ -41,5 +44,6 @@
     width: 80%;
     min-width: 40rem;
     max-width: 70rem;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }

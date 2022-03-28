@@ -19,7 +19,7 @@
 include_once 'load.php';
 include_once LIB_PATH.'/library.php';
 
-if(isset($_POST['authCodeSubmit'])) {
+if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
     $db = DB::instace();
     $authCode =  $db->clearStr(!isset($_GET['authCode']) ? $_POST['authCode'] : $_GET['authCode']);
 
@@ -52,8 +52,8 @@ if(isset($_POST['authCodeSubmit'])) {
         
         $emailRes = sendMail($user['email'], 
                              $user['name'].' '.$user['surname'],
-                             "Gentile ".$user['name'].' '.$user['surname'].", il suo token per l'accesso alla rete Wi-Fi dell'Avogadro è: <br> <strong>$token</strong>");
-
+                             'Avo Wi-Fi - Token',
+                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$token.'</strong>)');
     }
 }
 
@@ -68,7 +68,7 @@ printHead('Autenticazione',
 <div class="page-cont container container--gapM page-size">
     
     <?php
-        if(isset($_POST['authCodeSubmit']) && (int) $queryRes[0] === 1) {
+        if((isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) && (int) $queryRes[0] === 1) {
     ?>
 
         <h1 class="page-cont__title">Token inviato con successo</h1>
@@ -77,7 +77,7 @@ printHead('Autenticazione',
             Ciao <?php echo $user['name'].' '.$user['surname'] ?>, il tuo token per accedere al Wi-fi 
             è stato mandato alla seguente E-Mail:
         </p>
-        <p><?php echo $user['email']."  "."$token";?></p>
+        <p><?php echo $user['email'];?></p>
         
 
     <?php

@@ -16,8 +16,35 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
 */
-@import 'variables.css';
-@import 'base.css';
-@import 'layouts.css';
-@import 'components.css';
-@import 'mediaQuery.css';
+@media (max-width: 700px) {
+    main {
+        padding-top: 0;
+    }
+    .logo-box {
+        height: auto;
+        width: 100%;
+        padding-top: 0.3rem;
+        padding-bottom: 1.5rem;
+        border-radius: 0 0 3rem 3rem;
+    }
+    .logo-box__img {
+        width: 100%;
+    }
+    .page-cont{
+        background: unset;
+        box-shadow: unset;
+    }
+    .page-size {
+        min-width: 100%;
+        margin: unset;
+    }
+    .page-cont__form {
+        width: 85%;
+    }
+    .page-cont__title {
+        font-size: 2.5rem;
+    }
+    .input-text__label {
+        background-color: var(--clr-background-primary);
+    }
+}

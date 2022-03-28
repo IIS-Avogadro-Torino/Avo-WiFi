@@ -31,6 +31,7 @@
 /*_________Input-text_________*/
 .input-text {
     width: 100%;
+    position: relative;
 }
 .input-text__input {
     width: 100%;
@@ -42,19 +43,18 @@
     border-radius: 0.3rem;
 }
 .input-text__label {
-    height: 0;
-    position: relative;
-    top: -1.7rem;
-    margin-left: 0.4rem;
+    position: absolute;
+    left: 0.4rem;
+    padding: 0.1rem;
     pointer-events: none;
     transition: 0.3s ease;
-    background-image: var(--grad-white);
 }
 .input-text__input:focus + .input-text__label,
 .input-text__input:valid + .input-text__label {
-    top: -2.8rem;
+    top: 0rem;
+    transform: translateY(-50%);
     font-size: 0.8rem;
-    background-image: var(--grad-white);
+    height: auto;
 }
 /*_________Button_________*/
 .button {
@@ -68,6 +68,6 @@
     transition: 0.4s ease;
 }
 .button:hover {
-    background-color: var(--clr-background-primary);
+    background-color: var(--clr-background-primary-dark);
     color: var(--clr-primary);
 }

@@ -24,11 +24,26 @@ html, body {
 }
 main {
     width: 100%;
-    min-height: 850px;
+    min-height: 100vh;
     background-color: var(--clr-background-primary);
     padding: 3rem 0;
     box-sizing: border-box;
 }
 h1, h2, h3, h4, h5, p{
     margin: 0;
+}
+.page-cont {
+    border-radius: 2.5rem;
+    background: var(--grad-white);
+    box-shadow: var(--box-shadow-white);
+    padding: 2rem;
+    margin-top: 3.5rem;
+    box-sizing: border-box;
+}
+.page-cont__title {
+    font-size: 3rem;
+    text-align: center;
+}
+.page-cont__form {
+    width: 60%;
 }

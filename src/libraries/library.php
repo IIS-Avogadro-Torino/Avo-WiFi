@@ -25,7 +25,7 @@ require_once LIB_PATH."/DB.php";
 /**
  * 
  */
-function sendMail($email, $fullName, $body)
+function sendMail($email, $fullName, $title, $body)
 {
     require_once LIB_PATH.'/PHPmailer/src/Exception.php';
     require_once LIB_PATH.'/PHPmailer/src/PHPMailer.php';
@@ -42,18 +42,48 @@ function sendMail($email, $fullName, $body)
     $mail->SMTPSecure = 'TLS';                            // Enable TLS encryption, `ssl` also accepted
     $mail->Port = 587;                                    // TCP port to connect to 465 (SSL) o 587 (TLS)
     
-    $mail->setFrom('amministrazione_futurelabs@itisavogadro.it','Avo Wi-Fi');
+    $mail->setFrom('amministrazione_futurelabs@itisavogadro.it', 'Avo Wi-Fi');
     $mail->addAddress($email, $fullName);                     // Add a recipient
     
     $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
     //$mail->addAttachment($file,$name);            // Optional name
     $mail->isHTML(true);                                  // Set email format to HTML
     
-    $mail->Subject = "Avo Wi-Fi - token autenticazione";
+    $mail->Subject = $title;
     $mail->Body    = $body;
     
     if(!$mail->send()) 
         return false;
 
     return true;
+}
+
+/**
+*   builds the base URL of the site and return it
+*   Params: 
+*       @return string base URL of the site
+*/
+function baseUrl() {
+    $url = null;
+
+    // as default it's just the current URL
+    if( !$url ) {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+        $url = $protocol . $_SERVER['HTTP_HOST'] . innerJoinURL($_SERVER['REQUEST_URI'],str_replace('\\', '/', dirname(__DIR__)));
+    }
+
+    return trim($url);
+}
+
+/**
+*   given two URLs returns a URL with the only parts in common between the two URLs
+*   Params: 
+*       @return string the URL with only the parts in common
+*/
+function innerJoinURL($str1,$str2) {
+    $str1Splitted = explode("/", $str1);
+    $str2Splitted = explode("/", $str2);
+
+    return "/".implode("/",array_intersect($str1Splitted, $str2Splitted))."/";
 }

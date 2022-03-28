@@ -46,7 +46,8 @@ if(isset($_POST['indexSubmit'])) {
 
     $emailRes = sendMail($email, 
                          $name.' '.$surname,
-                         "Gentile ".$name.' '.$surname.", il suo codice è: <br> <strong>$authCode</strong>");
+                         'Avo Wi-Fi - Autenticazione',
+                         'Gentile '.$name.' '.$surname.', il suo codice è: <br> <strong>'.$authCode.'</strong> <br> o <a href="'.baseUrl().'authCode.php?authCode='.$authCode.'">Clicca Qui</a>');
 
     if(!$emailRes) {
         header('Location: index.php');
