@@ -22,27 +22,35 @@ include_once LIB_PATH.'/library.php';
 if(isset($_POST['indexSubmit'])) {
     $db = DB::instace();
     $authCode = strtoupper(bin2hex(random_bytes(30)));
-    $email = $db->clearStr(trim($_POST['email']));
-    $name = $db->clearStr(trim($_POST['name']));
-    $surname = $db->clearStr(trim($_POST['surname']));
 
-    $queryRes = $db->query("SELECT COUNT(*), user_id
-                            FROM users
-                            WHERE user_email = '$email';");
-    $queryRes = mysqli_fetch_array($queryRes);
+    $email = trim($_POST['email']);
+    $name = trim($_POST['name']);
+    $surname = trim($_POST['surname']);
 
-    if((int)$queryRes[0] !== 1) {
-        $db->query("INSERT INTO users(user_name, user_surname, user_email) 
-                    VALUES('$name', '$surname', '$email');");
+    $queryRes = $db->genericSimpleSelect([ 'COUNT(*)' ], 'users', array( 'user_email' => $email));
+
+    $numUser = (int) mysqli_fetch_array($queryRes)[0];
+
+    if($numUser !== 1) {
+        $db->genericSimpleInsert(array('user_name' => $authCode,
+                                       'user_surname' => $queryRes,
+                                       'user_email' => $email), 'users');
     }
 
-    $queryRes = $db->query("SELECT user_id
-                            FROM users
-                            WHERE user_email = '$email';");
-    $queryRes = mysqli_fetch_array($queryRes)[0];
+    $queryRes = $db->genericSimpleSelect([ 'user_id' ], 'users', array( 'user_email' => $email));
 
-    $db->query("INSERT INTO auth_codes(auth_code_value, fk_user_id) 
-                VALUES('$authCode', $queryRes);");
+    $userId = mysqli_fetch_array($queryRes)[0];
+
+    if($db->numberOfToken($userId, 'auth') >= 4) {
+        header('Location: index.php?err=1');
+        die();
+    } else if($db->numberOfToken($userId, 'wifi') >= 4) {
+        header('Location: index.php?err=2');
+        die();
+    }
+
+    $db->genericSimpleInsert(array('auth_code_value' => $authCode,
+                                   'fk_user_id' => $userId), 'auth_codes');
 
     $emailRes = sendMail($email, 
                          $name.' '.$surname,
@@ -50,7 +58,7 @@ if(isset($_POST['indexSubmit'])) {
                          'Gentile '.$name.' '.$surname.', il suo codice è: <br> <strong>'.$authCode.'</strong> <br> o <a href="'.baseUrl().'authCode.php?authCode='.$authCode.'">Clicca Qui</a>');
 
     if(!$emailRes) {
-        header('Location: index.php');
+        header('Location: index.php?err=3');
         die();
     }
 

@@ -21,39 +21,21 @@ include_once LIB_PATH.'/library.php';
 
 if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
     $db = DB::instace();
-    $authCode =  $db->clearStr(!isset($_GET['authCode']) ? $_POST['authCode'] : $_GET['authCode']);
+    $authCode = $db->clearStr(!isset($_GET['authCode']) ? $_POST['authCode'] : $_GET['authCode']);
 
-    $queryRes = $db->query("SELECT COUNT(*), fk_user_id
-                            FROM auth_codes
-                            WHERE auth_code_value = '$authCode';");
-    $queryRes = mysqli_fetch_array($queryRes);
+    $queryRes = $db->isValidAuthCode($authCode);
 
-    if((int) $queryRes[0] === 1) {
-        $db->query("DELETE FROM auth_codes
-                    WHERE fk_user_id = $queryRes[1];");
+    if($queryRes['valid']) {
+        $db->genericSimpleDelete(array('fk_user_id' => $queryRes['userId']), 'auth_codes');
 
-        $db->query("UPDATE tokens 
-                    SET fk_user_id = $queryRes[1], token_expiring_date = (NOW() + INTERVAL token_duration DAY) 
-                    WHERE fk_user_id IS NULL LIMIT 1;");
+        $db->assignRandomToken($queryRes['userId']);
 
-
-        $queryRes2 = $db->query("SELECT user_name AS name, user_surname AS surname, user_email AS email                                
-                                FROM users
-                                WHERE user_id = $queryRes[1];");
-
-        $user = mysqli_fetch_assoc($queryRes2);
-
-        $queryRes2 = $db->query("SELECT token_value AS token                                
-                                 FROM tokens
-                                 WHERE fk_user_id = $queryRes[1]
-                                 ORDER BY token_expiring_date DESC LIMIT 1;");
-
-        $token = mysqli_fetch_array($queryRes2)[0];
+        $user = $db->getUserInfoById($queryRes['userId']);
         
         $emailRes = sendMail($user['email'], 
                              $user['name'].' '.$user['surname'],
                              'Avo Wi-Fi - Token',
-                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$token.'</strong>)');
+                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$user['token'].'</strong>');
     }
 }
 
@@ -68,16 +50,16 @@ printHead('Autenticazione',
 <div class="page-cont container container--gapM page-size">
     
     <?php
-        if((isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) && (int) $queryRes[0] === 1) {
+        if((isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) && (int) $queryRes['valid'] === 1) {
     ?>
 
-        <h1 class="page-cont__title">Token inviato con successo</h1>
-    
-        <p>
-            Ciao <?php echo $user['name'].' '.$user['surname'] ?>, il tuo token per accedere al Wi-fi 
-            è stato mandato alla seguente E-Mail:
-        </p>
-        <p><?php echo $user['email'];?></p>
+    <h1 class="page-cont__title">Token inviato con successo</h1>
+
+    <p>
+        Ciao <?php echo $user['name'].' '.$user['surname'] ?>, il tuo token per accedere al Wi-fi 
+        è stato mandato alla seguente E-Mail ( controllare anche lo spam ):
+    </p>
+    <p><?php echo $user['email'];?></p>
         
 
     <?php
@@ -85,6 +67,10 @@ printHead('Autenticazione',
     ?>
     
     <h1 class="page-cont__title">Immetti codice conferma</h1>
+        
+    <p>
+        Ti è stata recapitata una email con un codice di autenticazione, immettilo qui sotto ( controllare anche lo spam )
+    </p>
 
     <form class="page-cont__form container container--gapS" method="POST" action="authCode.php">
         <?php 

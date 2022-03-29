@@ -23,7 +23,12 @@ include_once LIB_PATH.'/UILibrary.php';
 require_once LIB_PATH."/DB.php";
 
 /**
+ * Function to send E-Mail
  * 
+ * @param string $email the destination email
+ * @param string $fullname fullname of the receiver  
+ * @param string $title the title of the E-Mail
+ * @param string $body the body of the E-Mail, it could contains HTML
  */
 function sendMail($email, $fullName, $title, $body)
 {
@@ -59,9 +64,9 @@ function sendMail($email, $fullName, $title, $body)
 }
 
 /**
-*   builds the base URL of the site and return it
-*   Params: 
-*       @return string base URL of the site
+*   Builds the base URL of the site and return it
+*   
+*   @return string base URL of the site
 */
 function baseUrl() {
     $url = null;
@@ -77,9 +82,9 @@ function baseUrl() {
 }
 
 /**
-*   given two URLs returns a URL with the only parts in common between the two URLs
-*   Params: 
-*       @return string the URL with only the parts in common
+*   Given two URLs returns a URL with the only parts in common between the two URLs
+*   
+*   @return string the URL with only the parts in common
 */
 function innerJoinURL($str1,$str2) {
     $str1Splitted = explode("/", $str1);
