@@ -32,8 +32,8 @@ if(isset($_POST['indexSubmit'])) {
     $numUser = (int) mysqli_fetch_array($queryRes)[0];
 
     if($numUser !== 1) {
-        $db->genericSimpleInsert(array('user_name' => $authCode,
-                                       'user_surname' => $numUser,
+        $db->genericSimpleInsert(array('user_name' => $name,
+                                       'user_surname' => $surname,
                                        'user_email' => $email), 'users');
     }
 
