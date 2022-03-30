@@ -33,7 +33,7 @@ if(isset($_POST['indexSubmit'])) {
 
     if($numUser !== 1) {
         $db->genericSimpleInsert(array('user_name' => $authCode,
-                                       'user_surname' => $queryRes,
+                                       'user_surname' => $numUser,
                                        'user_email' => $email), 'users');
     }
 
