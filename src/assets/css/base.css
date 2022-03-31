@@ -47,3 +47,7 @@ h1, h2, h3, h4, h5, p{
 .page-cont__form {
     width: 60%;
 }
+.err {
+    color: var(--clr-error);
+    font-size: 1rem;
+}

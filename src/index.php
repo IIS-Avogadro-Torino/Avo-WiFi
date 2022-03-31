@@ -19,6 +19,9 @@
 include_once 'load.php';
 include_once LIB_PATH.'/library.php';
 
+$errors = array( 1 => 'Hai troppe richeste attive aspetta al massimo un ora per riprovare',
+                 2 => 'Hai già 10 token aspetta che scadano');
+
 if(isset($_POST['indexSubmit'])) {
     $db = DB::instace();
     $authCode = strtoupper(bin2hex(random_bytes(30)));
@@ -41,10 +44,10 @@ if(isset($_POST['indexSubmit'])) {
 
     $userId = mysqli_fetch_array($queryRes)[0];
 
-    if($db->numberOfToken($userId, 'auth') >= 4) {
+    if($db->numberOfToken($userId, 'auth') >= 10) {
         header('Location: index.php?err=1');
         die();
-    } else if($db->numberOfToken($userId, 'wifi') >= 4) {
+    } else if($db->numberOfToken($userId, 'wifi') >= 10) {
         header('Location: index.php?err=2');
         die();
     }
@@ -81,9 +84,10 @@ printHead('Richiesta Token',
         <?php 
             inputText("name", "Nome"); 
             inputText("surname", "Cognome"); 
-            inputText("email", "E-Mail"); 
+            inputText("email", "E-Mail", "email"); 
         ?>
         <input class="button" type="submit" name="indexSubmit" value="Richiedi">
+        <?php echo isset($_GET['err']) ? '<h5 class="err">' . $errors[$_GET['err']] . '</h5>' : '' ?>
     </form>
 </div>
 

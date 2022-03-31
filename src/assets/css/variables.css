@@ -23,6 +23,7 @@
     --clr-background-primary: #1A7A90;
     --clr-background-primary-dark: #156577;
     --clr-background-secondary: #4C4C4C;
+    --clr-error: red;
 
     /*______Font______*/
     --font-test: 'DM Sans', sans-serif;

@@ -78,12 +78,12 @@ function printFooter() {
  * Param:
  *  @return void
  */
-function inputText($name, $label = null) {
+function inputText($name, $label = null, $type = 'text') {
     $label = $label === null ? $name : $label;
 
     print "
     <div class=\"input-text container container--alignStart\">
-        <input class=\"input-text__input\" type=\"text\" name=\"$name\" required autocomplete=\"off\">
+        <input class=\"input-text__input\" type=\"$type\" name=\"$name\" autocomplete=\"off\" required>
         <label class=\"input-text__label\" for=\"$name\">$label</label>
     </div>";
 }

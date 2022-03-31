@@ -19,6 +19,8 @@
 include_once 'load.php';
 include_once LIB_PATH.'/library.php';
 
+$errors = array( 1 => 'Questo codice non è valido o è gia stato usato');
+
 if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
     $db = DB::instace();
     $authCode = $db->clearStr(!isset($_GET['authCode']) ? $_POST['authCode'] : $_GET['authCode']);
@@ -36,6 +38,9 @@ if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
                              $user['name'].' '.$user['surname'],
                              'Avo Wi-Fi - Token',
                              'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$user['token'].'</strong>');
+    } else {
+        header('Location: authCode.php?err=1');
+        die();
     }
 }
 
@@ -77,6 +82,7 @@ printHead('Autenticazione',
             inputText("authCode", "Codice autenticazione"); 
         ?>
         <input class="button" type="submit" name="authCodeSubmit" value="Verifica">
+        <?php echo isset($_GET['err']) ? '<h5 class="err">' . $errors[$_GET['err']] . '</h5>' : '' ?>
     </form>
 
     <?php } ?>
