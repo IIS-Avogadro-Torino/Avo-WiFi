@@ -92,13 +92,3 @@ function innerJoinURL($str1,$str2) {
 
     return "/".implode("/",array_intersect($str1Splitted, $str2Splitted))."/";
 }
-
-/**
- * Given an associative array with the key being the error number and the value the error message, it returns the error message based on the get parameter
- * 
- * @param array $errArray associative array ( errNo -> error message )
- * @return string the error message
- */
-function getError($errArray) {
-    return $errArray[$_GET['err']];
-}
