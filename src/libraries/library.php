@@ -19,7 +19,7 @@
 use PHPMailer\PHPMailer\PHPMailer;// namespaces for PHPmailer
 use PHPMailer\PHPMailer\Exception;
 
-include_once LIB_PATH.'/UILibrary.php';
+require_once LIB_PATH.'/UILibrary.php';
 require_once LIB_PATH."/DB.php";
 
 /**

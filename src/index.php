@@ -16,8 +16,8 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 ######################################################################
 
-include_once 'load.php';
-include_once LIB_PATH.'/library.php';
+require_once 'load.php';
+require_once LIB_PATH.'/library.php';
 
 $errors = array( 1 => 'Hai troppe richeste attive aspetta al massimo un ora per riprovare',
                  2 => 'Hai già 10 token aspetta che scadano');
@@ -75,7 +75,7 @@ printHead('Richiesta Token',
           false);
 ?>
 
-<?php include_once COMP_PATH.'/logoBox.php';?>
+<?php require_once COMP_PATH.'/logoBox.php';?>
 
 <div class="page-cont container container--gapM page-size">
     <h1 class="page-cont__title">Richiedi il tuo token</h1>
