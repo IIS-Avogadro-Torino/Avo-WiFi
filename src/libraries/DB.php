@@ -166,7 +166,7 @@ class DB {
     private function deleteExpiredToken($userId, $type) {
         return $this->genericSimpleDelete(array('fk_user_id' => $userId), 
                                           $type === 'auth' ? 'auth_codes' : ( $type === 'wifi' ? 'tokens' : ''),
-                                          "AND " . ($type === 'auth' ? 'token_expiring_date' : ($type === 'wifi' ? 'token_expiring_date' : '')) ." < NOW()");
+                                          "AND " . ($type === 'auth' ? 'token_expiring_date' : ($type === 'wifi' ? 'code_expiring_date' : '')) . " < NOW()");
     }
  
     /**
@@ -219,12 +219,13 @@ class DB {
      * @param int $userId the user ID that requests the token 
      * @return mysqli_result|bool the resoult of the query 
      */
-    function assignRandomToken($userId) {
+    function assignToken($userId, $duration) {
+        $duration = $this->clearStr($duration);
         $sanUserId = $this->clearStr($userId);
 
         return $this->query("UPDATE tokens 
                              SET fk_user_id = $sanUserId, token_expiring_date = (NOW() + INTERVAL token_duration DAY) 
-                             WHERE fk_user_id IS NULL LIMIT 1;");
+                             WHERE fk_user_id IS NULL AND token_duration = ".$duration." LIMIT 1;");
     }
 
     /**
@@ -236,7 +237,7 @@ class DB {
      */
     function numberOfToken($userId, $type) {
         $this->deleteExpiredToken($userId, $type);
-
+        
         $queryRes = $this->genericSimpleSelect([ 'COUNT(*)' ],
                                                $type === 'auth' ? 'auth_codes' : ( $type === 'wifi' ? 'tokens' : ''),
                                                array('fk_user_id' => $userId));
@@ -244,4 +245,66 @@ class DB {
         return mysqli_fetch_array($queryRes)[0];
     }
 
+    function numberRemainingToken($duration) {
+        $duration = $this->clearStr($duration);
+        $queryRes = $this->genericSimpleSelect([ 'COUNT(*)' ],
+                                               'tokens',
+                                               [], 
+                                               "fk_user_id IS NULL AND token_duration = ".$duration);
+
+        return mysqli_fetch_array($queryRes)[0];
+    }
+
+    function adminLogin($email, $password) {
+        $email = $this->clearStr($email);
+        $password = $this->clearStr($password);
+
+        $queryRes = $this->genericSimpleSelect(['user_pwd'], [ 'users' ], array('user_email' => $email, 'user_admin' => true), '', '=', 'AND');
+
+        $queryRes = mysqli_fetch_array($queryRes)[0];
+
+        $salt = explode('.', $queryRes)[1];
+        $pwd = explode('.', $queryRes)[0];
+
+        return $pwd === md5($password.$salt);
+    }
+
+    /*
+    function addAdmin($nome, $cognome, $email, $password) {
+        $salt = bin2hex(random_bytes(30));
+        $password = md5($password.$salt).'.'.$salt;
+
+        $this->genericSimpleInsert(array('user_name' => $nome,
+                                         'user_surname' => $cognome,
+                                         'user_email' => $email,
+                                         'user_admin' => true,
+                                         'user_pwd' => $password), 'users');
+    }*/
+
+    function tokenAlreadyExists($token) {
+        $token = $this->clearStr($token);
+        $queryRes = $this->genericSimpleSelect([ 'COUNT(*)' ],
+                                               'tokens',
+                                               array('token_value' => $token));
+
+        return mysqli_fetch_array($queryRes)[0] === 1;
+    }
+
+    function addToken($value, $duration) {
+        $value = $this->clearStr($value);
+        $duration = $this->clearStr($duration);
+
+        $this->genericSimpleInsert(array( 'token_value' => $value, 
+                                          'token_duration' => $duration), 'tokens');
+    }
+
+    function clearUnusableTokens() {
+
+        $durations = array_reduce(array_keys($GLOBALS['priviDoms']), function($carry, $ele) { 
+                                                                        return $carry .= ($ele.', ');
+                                                                     });
+        $this->genericSimpleDelete( [],
+                                   'tokens', 
+                                   'fk_user_id IS NULL AND token_duration NOT IN ('.substr($durations, 0, strlen($durations) - 2).')');
+    }
 }

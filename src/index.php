@@ -20,7 +20,11 @@ require_once 'load.php';
 require_once LIB_PATH.'/library.php';
 
 $errors = array( 1 => 'Hai troppe richeste attive aspetta al massimo un ora per riprovare',
-                 2 => 'Hai già 10 token aspetta che scadano');
+                 2 => 'Hai già 10 token aspetta che scadano',
+                 3 => 'Errore nel inviare la mail con il token di autenticazione',
+                 4 => 'Non ci sono più token disponibili aspetta che l\'ammistratore della rete li rimetta',
+                 5 => 'Email non valida');
+
 
 if(isset($_POST['indexSubmit'])) {
     $db = DB::instace();
@@ -29,6 +33,11 @@ if(isset($_POST['indexSubmit'])) {
     $email = trim($_POST['email']);
     $name = trim($_POST['name']);
     $surname = trim($_POST['surname']);
+
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        header('Location: index.php?err=5');
+        die();
+    }
 
     $queryRes = $db->genericSimpleSelect([ 'COUNT(*)' ], 'users', array( 'user_email' => $email));
 
@@ -58,10 +67,15 @@ if(isset($_POST['indexSubmit'])) {
     $emailRes = sendMail($email, 
                          $name.' '.$surname,
                          'Avo Wi-Fi - Autenticazione',
-                         'Gentile '.$name.' '.$surname.', il suo codice è: <br> <strong>'.$authCode.'</strong> <br> o <a href="'.baseUrl().'authCode.php?authCode='.$authCode.'">Clicca Qui</a>');
+                         'Gentile '.$name.' '.$surname.', il suo codice è: <br> <strong>'.$authCode.'</strong> <br> o <br/><a class="button" href="'.baseUrl().'authCode.php?authCode='.$authCode.'">Clicca Qui</a>');
 
     if(!$emailRes) {
         header('Location: index.php?err=3');
+        die();
+    }
+
+    if($db->numberRemainingToken(privDomainDuration($email)) == 0) {
+        header('Location: index.php?err=4');
         die();
     }
 
@@ -72,21 +86,19 @@ if(isset($_POST['indexSubmit'])) {
 printHead('Richiesta Token', 
           [ 'style.css' ],
           [ ],
-          false);
+          true);
 ?>
-
-<?php require_once COMP_PATH.'/logoBox.php';?>
 
 <div class="page-cont container container--gapM page-size">
     <h1 class="page-cont__title">Richiedi il tuo token</h1>
     
-    <form class="page-cont__form container container--gapS" method="POST" action="index.php">
+    <form class="page-cont__form container container--gapXS" method="POST" action="index.php">
         <?php 
             inputText("name", "Nome"); 
             inputText("surname", "Cognome"); 
             inputText("email", "E-Mail", "email"); 
         ?>
-        <input class="button" type="submit" name="indexSubmit" value="Richiedi">
+        <input class="button button--marginTop" type="submit" name="indexSubmit" value="Invia">
         <?php echo isset($_GET['err']) ? '<h5 class="err">' . $errors[$_GET['err']] . '</h5>' : '' ?>
     </form>
 </div>

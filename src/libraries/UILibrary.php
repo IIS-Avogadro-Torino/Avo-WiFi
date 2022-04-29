@@ -33,7 +33,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
         $cssIncludes .= "<link rel=\"stylesheet\" href=\"assets/css/$cssFile\">\n";
     
     foreach( $jsFiles as $jsFile )
-        $jsIncludes .= "<script src=\"assets/css/$jsFile\" defer></script>\n";
+        $jsIncludes .= "<script src=\"assets/js/$jsFile\" defer></script>\n";
 
     print "
     <!DOCTYPE html>
@@ -55,6 +55,7 @@ function printHead($pageName, $cssFiles = [], $jsFiles = [], $nav = true) {
 
     if($nav)
         include_once  COMP_PATH.'/nav.php';
+        
     
     print '<main>';
 }
@@ -83,7 +84,18 @@ function inputText($name, $label = null, $type = 'text') {
 
     print "
     <div class=\"input-text container container--alignStart\">
-        <input class=\"input-text__input\" type=\"$type\" name=\"$name\" autocomplete=\"off\" required>
         <label class=\"input-text__label\" for=\"$name\">$label</label>
+        <input class=\"input-text__input\" type=\"$type\" name=\"$name\" autocomplete=\"off\" placeholder=\"Immetti $label qui\" required>
+    </div>";
+}
+
+function inputFile($name, $label = null, $type = '') {
+    $label = $label === null ? $name : $label;
+
+    print "
+    <div class=\"input-file container container--row container--gapXS\">
+        <button type=\"button\" class=\"button input-file__btn\">$label</button>
+        <h3 class=\"input-file__file-name\"></h3>
+        <input type=\"file\" class=\"input-file__input\" accept=\"$type\" name=\"$name\" required>
     </div>";
 }

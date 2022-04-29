@@ -19,7 +19,9 @@
 require_once 'load.php';
 require_once LIB_PATH.'/library.php';
 
-$errors = array( 1 => 'Questo codice non è valido o è gia stato usato');
+$errors = array( 1 => 'Questo codice non è valido o è gia stato usato',
+                 4 => 'Non ci sono più token disponibili aspetta che l\'ammistratore della rete li rimetta');
+
 
 if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
     $db = DB::instace();
@@ -30,14 +32,23 @@ if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
     if($queryRes['valid']) {
         $db->genericSimpleDelete(array('fk_user_id' => $queryRes['userId']), 'auth_codes');
 
-        $db->assignRandomToken($queryRes['userId']);
-
         $user = $db->getUserInfoById($queryRes['userId']);
+
+        $privDomDuration = privDomainDuration($user['email']); 
+
+        if($db->numberRemainingToken($privDomDuration) == 0) {
+            header('Location: authCode.php?err=4');
+            die();
+        }
+
+        $db->assignToken($queryRes['userId'], $privDomDuration);
         
+        $token = mysqli_fetch_array($db->genericSimpleSelect(['token_value'], 'tokens', array('fk_user_id' => $queryRes['userId']), 'ORDER BY token_expiring_date DESC LIMIT 1'))[0];
+
         $emailRes = sendMail($user['email'], 
                              $user['name'].' '.$user['surname'],
                              'Avo Wi-Fi - Token',
-                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$user['token'].'</strong>');
+                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$token.'</strong>');
     } else {
         header('Location: authCode.php?err=1');
         die();
@@ -47,10 +58,8 @@ if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
 printHead('Autenticazione', 
           [ 'style.css' ],
           [ ],
-          false);
+          true);
 ?>
-
-<?php require_once COMP_PATH.'/logoBox.php';?>
 
 <div class="page-cont container container--gapM page-size">
     
