@@ -32,7 +32,7 @@ require_once LIB_PATH."/DB.php";
  * @param string $title the title of the E-Mail
  * @param string $body the body of the E-Mail, it could contains HTML
  */
-function sendMail($email, $fullName, $title, $body)
+function sendMail($email, $fullName, $title, $body, $cc = null, $bcc = null)
 {
     require_once LIB_PATH.'/PHPmailer/src/Exception.php';
     require_once LIB_PATH.'/PHPmailer/src/PHPMailer.php';
@@ -51,13 +51,21 @@ function sendMail($email, $fullName, $title, $body)
     
     $mail->setFrom('amministrazione_futurelabs@itisavogadro.it', 'Avo Wi-Fi');
     $mail->addAddress($email, $fullName);                     // Add a recipient
+
+    if($cc !== null)
+        foreach($cc as $name => $email)
+            $mail->addCC($email, $name);
+
+    if($bcc !== null)
+        foreach($bcc as $name => $email)
+            $mail->addBCC($email, $name);
     
     $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
     //$mail->addAttachment($file,$name);            // Optional name
     $mail->isHTML(true);                                  // Set email format to HTML
     
     $mail->Subject = $title;
-    $mail->Body    = str_replace('[[Msg]]', $body, str_replace('[[Title]]', $title, $mainBodyEmail));
+    $mail->Body    = str_replace('[[Msg]]', $body, str_replace('[[Title]]', $title, $GLOBALS['mainBodyEmail']));
     
     if(!$mail->send()) 
         return false;
@@ -210,4 +218,15 @@ function findSeparator($file)
     }
 
     return array_search(max($delimiters), $delimiters);
+}
+
+function notifyLackingOfToken($type, $remaining) {
+    $names = array_keys($GLOBALS['admins']);
+
+    sendMail($GLOBALS['admins'][$names[0]], 
+             $names[0], 
+             "AvoWifi - Mancano token da $type giorn".($type === 1 ? 'o' : 'i'), 
+             "Gentili amministratori, rimangono $remaining token di durata $type giorn".($type === 1 ? 'o' : 'i')." è consigliato metterne di nuovi
+              in modo da non compromettere l'esperienza dell'utente, è possibile fare ciò dalla seguente pagina dopo aver fatto l'accesso: <br/><br/> <a href=\"".baseUrl()."adminLogin.php\" style=\"text-align: center\">".baseUrl()."adminLogin.php</a>",
+             array_slice($GLOBALS['admins'], 1, count($GLOBALS['admins']) - 1));
 }

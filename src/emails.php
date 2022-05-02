@@ -1,5 +1,5 @@
 <?php 
-
+global $mainBodyEmail;
 $mainBodyEmail = '<!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 
@@ -18,13 +18,8 @@ $mainBodyEmail = '<!DOCTYPE html>
             padding: 0;
         }
 
-        a[x-apple-data-detectors] {
-            color: inherit !important;
-            text-decoration: inherit !important;
-        }
-
-        #MessageViewBody a {
-            color: inherit;
+        a {
+            color: white;
             text-decoration: none;
         }
 

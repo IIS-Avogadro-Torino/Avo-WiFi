@@ -38,6 +38,16 @@ if(isset($_POST['indexSubmit'])) {
         header('Location: index.php?err=5');
         die();
     }
+    
+    $privDomDuration = privDomainDuration($email); 
+    $ramainingTokens = $db->numberRemainingToken($privDomDuration);
+    if($ramainingTokens <= 5) {
+        notifyLackingOfToken($privDomDuration, $ramainingTokens > 0 ? $ramainingTokens - 1 : 0);
+        if($ramainingTokens === 0) {
+            header('Location: index.php?err=4');
+            die();
+        }
+    }
 
     $queryRes = $db->genericSimpleSelect([ 'COUNT(*)' ], 'users', array( 'user_email' => $email));
 
@@ -67,15 +77,10 @@ if(isset($_POST['indexSubmit'])) {
     $emailRes = sendMail($email, 
                          $name.' '.$surname,
                          'Avo Wi-Fi - Autenticazione',
-                         'Gentile '.$name.' '.$surname.', il suo codice è: <br> <strong>'.$authCode.'</strong> <br> o <br/><a class="button" href="'.baseUrl().'authCode.php?authCode='.$authCode.'">Clicca Qui</a>');
+                         'Gentile '.$name.' '.$surname.', il suo codice di autenticazione della richesta che dovrà inserire nella pagina apposita è: <br><br> <strong>'.$authCode.'</strong> <br><br> o può direttamente <br/><br><a class="button" style="color:#FFFFFF" href="'.baseUrl().'authCode.php?authCode='.$authCode.'">Cliccare Qui</a>');
 
     if(!$emailRes) {
         header('Location: index.php?err=3');
-        die();
-    }
-
-    if($db->numberRemainingToken(privDomainDuration($email)) == 0) {
-        header('Location: index.php?err=4');
         die();
     }
 

@@ -242,7 +242,7 @@ class DB {
                                                $type === 'auth' ? 'auth_codes' : ( $type === 'wifi' ? 'tokens' : ''),
                                                array('fk_user_id' => $userId));
 
-        return mysqli_fetch_array($queryRes)[0];
+        return (int) mysqli_fetch_array($queryRes)[0];
     }
 
     function numberRemainingToken($duration) {
@@ -252,7 +252,7 @@ class DB {
                                                [], 
                                                "fk_user_id IS NULL AND token_duration = ".$duration);
 
-        return mysqli_fetch_array($queryRes)[0];
+        return (int) mysqli_fetch_array($queryRes)[0];
     }
 
     function adminLogin($email, $password) {

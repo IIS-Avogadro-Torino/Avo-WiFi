@@ -30,15 +30,19 @@ if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
     $queryRes = $db->isValidAuthCode($authCode);
 
     if($queryRes['valid']) {
-        $db->genericSimpleDelete(array('fk_user_id' => $queryRes['userId']), 'auth_codes');
-
         $user = $db->getUserInfoById($queryRes['userId']);
 
         $privDomDuration = privDomainDuration($user['email']); 
+        $ramainingTokens = $db->numberRemainingToken($privDomDuration);
+        
+        $db->genericSimpleDelete(array('fk_user_id' => $queryRes['userId']), 'auth_codes');
 
-        if($db->numberRemainingToken($privDomDuration) == 0) {
-            header('Location: authCode.php?err=4');
-            die();
+        if($ramainingTokens <= 5) {
+            notifyLackingOfToken($privDomDuration, $ramainingTokens > 0 ? $ramainingTokens - 1 : 0);
+            if($ramainingTokens === 0) {
+                header('Location: authCode.php?err=4');
+                die();
+            }
         }
 
         $db->assignToken($queryRes['userId'], $privDomDuration);
@@ -48,7 +52,7 @@ if(isset($_POST['authCodeSubmit']) || isset($_GET['authCode'])) {
         $emailRes = sendMail($user['email'], 
                              $user['name'].' '.$user['surname'],
                              'Avo Wi-Fi - Token',
-                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla rete Wi-Fi dell\'Avogadro è: <br> <strong>'.$token.'</strong>');
+                             'Gentile '.$user['name'].' '.$user['surname'].', il suo token per l\'accesso alla <br>rete Wi-Fi dell\'Avogadro è: <br><br> <strong>'.$token.'</strong>');
     } else {
         header('Location: authCode.php?err=1');
         die();
@@ -73,7 +77,7 @@ printHead('Autenticazione',
         Ciao <?php echo $user['name'].' '.$user['surname'] ?>, il tuo token per accedere al Wi-fi 
         è stato mandato alla seguente E-Mail ( controllare anche lo spam ):
     </p>
-    <p><?php echo $user['email'];?></p>
+    <p class="page-cont__text--center"><?php echo $user['email'];?></p>
         
 
     <?php
